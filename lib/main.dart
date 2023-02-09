@@ -40,18 +40,41 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              ref.watch(mainText),
-            ),
-            Text(
               ref.watch(countProvider).toString(),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                FloatingActionButton(
+                  onPressed: () => ref.watch(countProvider.notifier).state++,
+                  tooltip: 'Increment',
+                  child: const Icon(Icons.add),
+                ),
+                FloatingActionButton(
+                  onPressed: () => ref.watch(countProvider.notifier).state--,
+                  tooltip: 'Increment',
+                  child: const Icon(Icons.remove),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  ref.watch(addProvider).toString(),
+                ),
+                Text(
+                  ref.watch(removeProvider).toString(),
+                ),
+              ],
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => ref.read(countProvider.notifier).state++,
+        onPressed: () => ref.read(countProvider.notifier).state = 0,
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.refresh),
       ),
     );
   }

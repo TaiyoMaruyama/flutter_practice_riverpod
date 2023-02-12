@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plactice_riverpod/Data/countData.dart';
 import 'package:plactice_riverpod/provider.dart';
+import 'package:plactice_riverpod/viewModel.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -28,6 +29,15 @@ class MyHomePage extends ConsumerStatefulWidget {
 }
 
 class _MyHomePageState extends ConsumerState<MyHomePage> {
+  ViewModel _viewModel = ViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _viewModel.setRef(ref);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,11 +51,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              ref
-                  .watch(countDataProvider.notifier)
-                  .state
-                  .count
-                  .toString(),
+              _viewModel.count,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -53,8 +59,10 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 FloatingActionButton(
                   onPressed: () {
                     setState(() {
-                      CountData countData = ref.read(countDataProvider.notifier).state;
-                      ref.read(countDataProvider.notifier).state = countData.copyWith(
+                      CountData countData =
+                          ref.read(countDataProvider.notifier).state;
+                      ref.read(countDataProvider.notifier).state =
+                          countData.copyWith(
                         count: countData.count + 1,
                         countUp: countData.countUp + 1,
                       );
@@ -67,7 +75,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                   onPressed: () {
                     setState(() {
                       CountData countData = ref.read(countDataProvider.notifier).state;
-                      ref.read(countDataProvider.notifier).state = countData.copyWith(
+                      ref.read(countDataProvider.notifier).state =
+                          countData.copyWith(
                         count: countData.count - 1,
                         countDown: countData.countDown + 1,
                       );
@@ -81,20 +90,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text(
-                  ref
-                      .watch(countDataProvider.notifier)
-                      .state
-                      .countUp
-                      .toString(),
-                ),
-                Text(
-                  ref
-                      .watch(countDataProvider.notifier)
-                      .state
-                      .countDown
-                      .toString(),
-                ),
+                Text(_viewModel.countUp),
+                Text(_viewModel.countDown),
               ],
             ),
           ],

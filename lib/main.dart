@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:plactice_riverpod/Data/countData.dart';
 import 'package:plactice_riverpod/provider.dart';
 
 void main() {
@@ -40,20 +41,40 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              ref.watch(countProvider).toString(),
+              ref
+                  .watch(countDataProvider.notifier)
+                  .state
+                  .count
+                  .toString(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 FloatingActionButton(
-                  onPressed: () => ref.watch(countProvider.notifier).state++,
+                  onPressed: () {
+                    setState(() {
+                      CountData countData = ref.read(countDataProvider.notifier).state;
+                      ref.read(countDataProvider.notifier).state = countData.copyWith(
+                        count: countData.count + 1,
+                        countUp: countData.countUp + 1,
+                      );
+                    });
+                  },
                   tooltip: 'Increment',
                   child: const Icon(Icons.add),
                 ),
                 FloatingActionButton(
-                  onPressed: () => ref.watch(countProvider.notifier).state--,
+                  onPressed: () {
+                    setState(() {
+                      CountData countData = ref.read(countDataProvider.notifier).state;
+                      ref.read(countDataProvider.notifier).state = countData.copyWith(
+                        count: countData.count - 1,
+                        countDown: countData.countDown + 1,
+                      );
+                    });
+                  },
                   tooltip: 'Increment',
-                  child: const Icon(Icons.remove),
+                  child: const Icon(Icons.add),
                 ),
               ],
             ),
@@ -61,10 +82,18 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  ref.watch(addProvider).toString(),
+                  ref
+                      .watch(countDataProvider.notifier)
+                      .state
+                      .countUp
+                      .toString(),
                 ),
                 Text(
-                  ref.watch(removeProvider).toString(),
+                  ref
+                      .watch(countDataProvider.notifier)
+                      .state
+                      .countDown
+                      .toString(),
                 ),
               ],
             ),
@@ -72,9 +101,17 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => ref.read(countProvider.notifier).state = 0,
+        onPressed: () {
+          setState(() {
+            ref.read(countDataProvider.notifier).state = const CountData(
+              count: 0,
+              countUp: 0,
+              countDown: 0,
+            );
+          });
+        },
         tooltip: 'Increment',
-        child: const Icon(Icons.refresh),
+        child: const Icon(Icons.add),
       ),
     );
   }

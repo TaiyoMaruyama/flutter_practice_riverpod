@@ -7,7 +7,7 @@ class ViewModel {
   late WidgetRef _ref;
 
   void setRef(WidgetRef ref) {
-    this._ref = ref;
+    _ref = ref;
   }
 
   get count => _ref.watch(countDataProvider.notifier).state.countUp.toString();
@@ -18,8 +18,5 @@ class ViewModel {
   get countDown =>
       _ref.watch(countDataProvider.notifier).state.countDown.toString();
 
-  void onIncrease (){
-    _logic.increase();
-    _ref.watch(countDataProvider.notifier).state = _logic.countData;
-  }
 }
+
